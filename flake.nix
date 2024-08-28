@@ -46,6 +46,9 @@
 
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
           kine = pkgs.callPackage ./pkgs/kine { };
+
+          # pending merge of PR: https://github.com/NixOS/nixpkgs/pull/330775
+          nomad-driver-containerd = pkgs.callPackage ./pkgs/nomad-driver-containerd { };
         };
       }
     );
