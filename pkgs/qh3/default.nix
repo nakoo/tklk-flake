@@ -2,22 +2,17 @@
   lib,
   stdenv,
   buildPythonPackage,
-  certifi,
   fetchFromGitHub,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
   pythonOlder,
-  pkg-config,
   rustPlatform,
   libiconv,
   darwin,
-  hypothesis,
+  python,
+  openssl,
+  runCommand,
   cmake,
   ninja,
-  cryptography,
-  python,
-  nasm,
+  pkg-config,
 }:
 
 buildPythonPackage rec {
@@ -37,33 +32,45 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-        "ls-qpack-sys-0.1.4" = "sha256-N4vSmLkkNKM1OW3NhvF4IBlSL6LMBbyV+08B09EbLR0=";
+      "ls-qpack-sys-0.1.4" = "sha256-N4vSmLkkNKM1OW3NhvF4IBlSL6LMBbyV+08B09EbLR0=";
     };
   };
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      ninja
-      nasm
-    ]
-    ++ (with rustPlatform; [
-      cargoSetupHook maturinBuildHook
-    ]);
-
-  buildInputs = [libiconv cryptography] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
 
   dontUseCmakeConfigure = true;
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+      pkg-config
+    ]
+    ++ (with rustPlatform; [
+      bindgenHook
+      cargoSetupHook
+      maturinBuildHook
+    ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      # Needed with GCC 12 but breaks on darwin (with clang)
+      "-Wno-error=stringop-overflow"
+    ]
+  );
 
-  pythonImportsCheck = [ "qh3" "qh3._hazmat" ];
+  buildInputs =
+    [
+      openssl
+      libiconv
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
+
+  pythonImportsCheck = [ "qh3" ];
 
   meta = with lib; {
     description = "HTTP/2 State-Machine based protocol implementation";
     homepage = "https://h2.readthedocs.io";
-    changelog = "https://github.com/jawah/h2/blob/${version}/CHANGELOG.rst";
+    changelog = "https://github.com/jawah/qh3/blob/${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ ];
   };

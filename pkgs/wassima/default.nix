@@ -4,9 +4,6 @@
   buildPythonPackage,
   certifi,
   fetchFromGitHub,
-  pytest-mock,
-  pytest-xdist,
-  pytestCheckHook,
   pythonOlder,
   pkg-config,
   rustPlatform,
@@ -48,12 +45,6 @@ buildPythonPackage rec {
     certifi
   ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
-  ];
-
-  nativeCheckInputs = [
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
   ];
 
   disabledTests = [
