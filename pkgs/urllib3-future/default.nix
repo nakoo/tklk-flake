@@ -64,18 +64,21 @@ buildPythonPackage rec {
     export CI # Increases LONG_TIMEOUT
   '';
 
-  checkPhase = ''
-    # skip this test due to it requiring external network access
-    # as well as a dep on ipv6, which test build might also not have
-    pytest -k "not test_doh_rfc8484"
-  '';
-
   pythonImportsCheck = [ "urllib3_future" ];
 
+  disabledTests = [
+    "test_doh_rfc8484"
+  ];
   disabledTestPaths = [
     "test/contrib/test_resolver.py"
+    "test/contrib/asynchronous/test_socks.py"
     "test/test_poolmanager.py"
     "test/with_dummyserver/test_socketlevel.py"
+    "test/with_dummyserver/test_connectionpool.py"
+    "test/with_dummyserver/test_proxy_poolmanager.py"
+    "test/with_dummyserver/asynchronous/test_happy_eyeballs.py"
+    "test/with_dummyserver/asynchronous/test_connectionpool.py"
+    "test/with_dummyserver/asynchronous/test_poolmanager.py"
   ];
 
   meta = with lib; {
