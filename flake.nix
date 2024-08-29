@@ -9,6 +9,7 @@
   nixConfig = {
     extra-substituters = [ "http://cache.tklk.dev/tklk" ];
     extra-trusted-public-keys = [ "tklk:rZcfXQZR52zK/CPWEhbn/kW7j102wOLCkWqgZIhWSYI=" ];
+    allowUnfree = true;
   };
 
   inputs = {
@@ -78,6 +79,15 @@
 
           # pending merge of PR: https://github.com/NixOS/nixpkgs/pull/330775
           nomad-driver-containerd = pkgs.callPackage ./pkgs/nomad-driver-containerd { };
+
+          ## non-free packages to cache in personal binary store
+          terraform = pkgs.terraform;
+          vault = pkgs.vault;
+          nomad = pkgs.nomad;
+          nomad_1_8 = pkgs.nomad_1_8;
+          consul = pkgs.consul;
+          boundary = pkgs.boundary;
+          packer = pkgs.packer;
         };
       }
     );
