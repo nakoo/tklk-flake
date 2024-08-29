@@ -41,6 +41,7 @@
                     "test_config_dir_is_created"
                     "test_incomplete_response"
                     "test_main_entry_point"
+                    "test_daemon_runner"
                 ];
                 src = super.fetchFromGitHub {
                     owner = "Ousret";
