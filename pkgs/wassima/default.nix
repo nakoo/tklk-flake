@@ -40,12 +40,14 @@ buildPythonPackage rec {
       maturinBuildHook
     ]);
 
-  buildInputs = [
-    libiconv
-    certifi
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      libiconv
+      certifi
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   disabledTests = [
     "test_ctx_use_system_store"

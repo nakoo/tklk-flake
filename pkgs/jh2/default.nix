@@ -44,11 +44,13 @@ buildPythonPackage rec {
       maturinBuildHook
     ]);
 
-  buildInputs = [libiconv] ++ lib.optionals stdenv.isDarwin [
-    # Darwin includes certifi as wassima doesn't yet suport wassima
-    certifi
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [ libiconv ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Darwin includes certifi as wassima doesn't yet suport wassima
+      certifi
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   nativeCheckInputs = [
     hypothesis

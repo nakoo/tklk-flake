@@ -1,7 +1,13 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, ...}:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  ...
+}:
 
 buildGoModule rec {
-  name = "cilium-cni";
+  pname = "cilium-cni";
   version = "1.16.1";
   src = fetchFromGitHub {
     owner = "cilium";

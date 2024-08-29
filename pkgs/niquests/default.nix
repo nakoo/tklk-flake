@@ -48,18 +48,17 @@ buildPythonPackage rec {
     urllib3-future
   ];
 
-  disabledTests =
-    [
-      # uses external network connection
-      "test_ensure_ipv6"
+  disabledTests = [
+    # uses external network connection
+    "test_ensure_ipv6"
 
-      # fails as it raises different error than expected (error is more granular than expected)
-      # ie, port cant be cast to int, vs the expected, more general, InvalidURL
-      "test_redirecting_to_bad_url"
+    # fails as it raises different error than expected (error is more granular than expected)
+    # ie, port cant be cast to int, vs the expected, more general, InvalidURL
+    "test_redirecting_to_bad_url"
 
-      "test_connect_timeout"
-      "test_total_timeout_connect"
-    ];
+    "test_connect_timeout"
+    "test_total_timeout_connect"
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio

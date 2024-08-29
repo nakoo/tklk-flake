@@ -36,19 +36,19 @@
             (self: super: {
               httpie = super.httpie.overrideAttrs (oldAttrs: rec {
                 version = "4.0.0-dev";
-                propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [] ++ [ super.niquests ];
-                disabledTests = oldAttrs.disabledTests or [] ++ [
-                    "test_config_dir_is_created"
-                    "test_incomplete_response"
-                    "test_main_entry_point"
-                    "test_daemon_runner"
+                propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [ super.niquests ];
+                disabledTests = oldAttrs.disabledTests or [ ] ++ [
+                  "test_config_dir_is_created"
+                  "test_incomplete_response"
+                  "test_main_entry_point"
+                  "test_daemon_runner"
                 ];
                 src = super.fetchFromGitHub {
-                    owner = "Ousret";
-                    repo = "httpie";
-                    rev = "2e3617ecdbc8cabab404fe3133ae671df8579b04";
-                    hash = "sha256-4TiItfVVJr6uJO8GtjN52NysWzwSJ2+l/Uh1mFE9cx0=";
-                  };
+                  owner = "Ousret";
+                  repo = "httpie";
+                  rev = "2e3617ecdbc8cabab404fe3133ae671df8579b04";
+                  hash = "sha256-4TiItfVVJr6uJO8GtjN52NysWzwSJ2+l/Uh1mFE9cx0=";
+                };
               });
             })
           ];
