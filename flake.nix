@@ -9,7 +9,6 @@
   nixConfig = {
     extra-substituters = [ "http://cache.tklk.dev/tklk" ];
     extra-trusted-public-keys = [ "tklk:rZcfXQZR52zK/CPWEhbn/kW7j102wOLCkWqgZIhWSYI=" ];
-    allowUnfree = true;
   };
 
   inputs = {
@@ -28,6 +27,7 @@
       let
         pkgs = import nixpkgs {
           inherit system;
+          config.allowUnfree = true;
 
           # some of the python packages need to be included as an overlay to be imported correctly
           overlays = [
