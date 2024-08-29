@@ -6,6 +6,11 @@
     have the time to maintain properly for nixpkgs.
   '';
 
+  nixConfig = {
+    extra-substituters = [ "http://cache.tklk.dev/tklk" ];
+    extra-trusted-public-keys = [ "tklk:rZcfXQZR52zK/CPWEhbn/kW7j102wOLCkWqgZIhWSYI=" ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
