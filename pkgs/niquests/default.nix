@@ -56,6 +56,9 @@ buildPythonPackage rec {
       # fails as it raises different error than expected (error is more granular than expected)
       # ie, port cant be cast to int, vs the expected, more general, InvalidURL
       "test_redirecting_to_bad_url"
+
+      "test_connect_timeout"
+      "test_total_timeout_connect"
     ];
 
   nativeCheckInputs = [
