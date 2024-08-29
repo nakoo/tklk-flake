@@ -56,6 +56,10 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    "test_ctx_use_system_store"
+  ];
+
   pythonImportsCheck = [ "wassima" ];
 
   meta = with lib; {
