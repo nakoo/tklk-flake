@@ -3,7 +3,7 @@
 buildGoModule rec {
   name = "cilium-cni";
   version = "1.16.1";
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "cilium";
     repo = "cilium";
     rev = "v${version}";
