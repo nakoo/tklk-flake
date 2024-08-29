@@ -30,6 +30,7 @@
               wassima = super.python3Packages.callPackage ./pkgs/wassima { };
               jh2 = super.python3Packages.callPackage ./pkgs/jh2 { };
               qh3 = super.python3Packages.callPackage ./pkgs/qh3 { };
+              niquests = super.python3Packages.callPackage ./pkgs/niquests { };
             })
           ];
         };
@@ -45,8 +46,8 @@
           wassima = pythonPackages.callPackage ./pkgs/wassima { };
 
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
-          kine = pkgs.callPackage ./pkgs/kine { };
           grpcmd = pkgs.callPackage ./pkgs/grpcmd { };
+          kine = pkgs.callPackage ./pkgs/kine { };
 
           # pending merge of PR: https://github.com/NixOS/nixpkgs/pull/330775
           nomad-driver-containerd = pkgs.callPackage ./pkgs/nomad-driver-containerd { };

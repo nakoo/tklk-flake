@@ -6,7 +6,7 @@ buildGoModule rec {
   src = pkgs.fetchFromGitHub {
     owner = "cilium";
     repo = "cilium";
-    rev = "v1.16.1";
+    rev = "v${version}";
     hash = "sha256-vhnHCLIQEQTK/Uv3oPW49KZyDWQOKxgsrZRxh4yRZlg=";
   };
   vendorHash = null;
