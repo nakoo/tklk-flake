@@ -43,9 +43,10 @@ buildPythonPackage rec {
       maturinBuildHook
     ]);
 
-  buildInputs = [libiconv] ++ lib.optionals stdenv.isDarwin [
-    # Darwin includes certifi as wassima doesn't yet suport wassima
+  buildInputs = [
+    libiconv
     certifi
+  ] ++ lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
