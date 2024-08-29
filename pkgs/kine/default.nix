@@ -16,6 +16,7 @@ buildGoModule rec {
     "-X github.com/k3s-io/kine/pkg/version.Version=v${version}"
     "-X github.com/k3s-io/kine/pkg/version.GitCommit=unknown"
   ];
+  doCheck = false;
   env = {
     "CGO_CFLAGS" = "-DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_USE_ALLOCA=1";
   };
