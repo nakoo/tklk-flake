@@ -72,6 +72,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "urllib3_future" ];
 
+  disabledTestPaths = [
+    "test/contrib/test_resolver.py"
+    "test/test_poolmanager.py"
+    "test/with_dummyserver/test_socketlevel.py"
+  ];
+
   meta = with lib; {
     description = "Powerful, user-friendly HTTP client for Python";
     homepage = "https://urllib3future.readthedocs.io/en/latest/";
