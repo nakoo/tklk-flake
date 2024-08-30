@@ -14,6 +14,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    attic = {
+      url = "github:zhaofengli/attic";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -21,6 +25,7 @@
       self,
       nixpkgs,
       flake-utils,
+      attic,
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -80,7 +85,7 @@
           # pending merge of PR: https://github.com/NixOS/nixpkgs/pull/330775
           nomad-driver-containerd = pkgs.callPackage ./pkgs/nomad-driver-containerd { };
 
-          ## non-free packages to cache in personal binary store
+          # non-free packages to cache in personal binary store
           terraform = pkgs.terraform;
           vault = pkgs.vault;
           nomad = pkgs.nomad;
@@ -88,6 +93,11 @@
           consul = pkgs.consul;
           boundary = pkgs.boundary;
           packer = pkgs.packer;
+
+          # pre-build attic binaries
+          attic = attic.packages.${system}.attic;
+          attic-client = attic.packages.${system}.attic-client;
+          attic-server = attic.packages.${system}.attic-server;
         };
       }
     );
