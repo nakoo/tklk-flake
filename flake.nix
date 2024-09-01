@@ -26,6 +26,7 @@
       nixpkgs,
       flake-utils,
       attic,
+      ...
     }:
     flake-utils.lib.eachDefaultSystem (
       system:
@@ -93,6 +94,9 @@
           consul = pkgs.consul;
           boundary = pkgs.boundary;
           packer = pkgs.packer;
+
+          sublimetext4 = pkgs.callPackage ./pkgs/sublimetext4 { };
+          sublimetext4-dev = pkgs.callPackage ./pkgs/sublimetext4 { dev = true; };
 
           # pre-build attic binaries
           attic = attic.packages.${system}.attic;
