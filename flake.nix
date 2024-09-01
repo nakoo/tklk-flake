@@ -95,8 +95,8 @@
           boundary = pkgs.boundary;
           packer = pkgs.packer;
 
-          sublimetext4 = pkgs.callPackage ./pkgs/sublimetext4 { };
-          sublimetext4-dev = pkgs.callPackage ./pkgs/sublimetext4 { dev = true; };
+          sublime4 = pkgs.callPackage ./pkgs/sublimetext4 { };
+          sublime4-dev = pkgs.callPackage ./pkgs/sublimetext4 { dev = true; };
 
           # pre-build attic binaries
           attic = attic.packages.${system}.attic;
