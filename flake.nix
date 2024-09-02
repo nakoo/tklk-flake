@@ -95,6 +95,8 @@
           boundary = pkgs.boundary;
           packer = pkgs.packer;
 
+          zerotierone = pkgs.zerotierone;
+
           sublime4 = pkgs.callPackage ./pkgs/sublimetext4 { };
           sublime4-dev = pkgs.callPackage ./pkgs/sublimetext4 { dev = true; };
 
