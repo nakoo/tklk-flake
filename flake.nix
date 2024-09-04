@@ -82,6 +82,7 @@
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
           grpcmd = pkgs.callPackage ./pkgs/grpcmd { };
           kine = pkgs.callPackage ./pkgs/kine { };
+          bio-rd = pkgs.callPackage ./pkgs/bio-rd { };
 
           # pending merge of PR: https://github.com/NixOS/nixpkgs/pull/330775
           nomad-driver-containerd = pkgs.callPackage ./pkgs/nomad-driver-containerd { };
