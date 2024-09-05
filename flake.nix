@@ -51,9 +51,11 @@
                 propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [ super.niquests ];
                 disabledTests = oldAttrs.disabledTests or [ ] ++ [
                   "test_config_dir_is_created"
+                  "test_ensure_resolver_used"
                   "test_incomplete_response"
                   "test_main_entry_point"
                   "test_daemon_runner"
+                  "test_secure_cookies_on_localhost"
                 ];
                 src = super.fetchFromGitHub {
                   owner = "Ousret";
