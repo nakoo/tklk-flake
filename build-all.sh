@@ -1,37 +1,69 @@
-#!/bin/sh
+#!/bin/bash
 set -e
-echo "reset flake files if they've been modified"
-# git checkout flake.nix
+
+linux_packages=(
+    "cilium-cni"
+    "bio-rd"
+    "nomad"
+    "nomad-driver-containerd"
+)
+
+mac_packages=(
+    "sublime4"
+    "sublime4-dev"
+)
+
+common_packages=(
+    "kine"
+    "httpie"
+    "grpcmd"
+    "terraform"
+    "vault"
+    "nomad_1_8"
+    "consul"
+    "boundary"
+    "packer"
+    "attic"
+    "attic-client"
+    "attic-server"
+    "zerotierone"
+)
+
+build_if_needed() {
+    local package="$1"
+    output=$(nix build ".#$package" --dry-run --print-out-paths --accept-flake-config 2>&1)
+    if echo "$output" | grep -q "will be built:"; then
+        echo "Package $package needs to be built. Building..."
+        nix build ".#$package" --accept-flake-config
+    else
+        echo "Package $package is already built and available in the cache. Skipping."
+    fi
+}
+
+echo "Reset flake files if they've been modified"
+git checkout flake.nix
 git checkout flake.lock
-if [ $(uname -o) == "Darwin" ]; then
-  echo "Use nixpkgs for macOS builds"
-  sed -i '' 's/nixos-unstable/nixpkgs-unstable/g' flake.nix
-  echo "building macOS specific packages first"
-  nix build .#sublime4 --accept-flake-config
-  nix build .#sublime4-dev --accept-flake-config
+
+if [ "$(uname -s)" == "Darwin" ]; then
+    echo "Use nixpkgs for macOS packages"
+    sed -i '' 's/nixos-unstable/nixpkgs-unstable/g' flake.nix
+    echo "Building mac-only packages"
+    for package in "${mac_packages[@]}"; do
+        build_if_needed "$package"
+    done
 else
-  echo "building linux-only builds first"
-  nix build .#cilium-cni --accept-flake-config
-  nix build .#bio-rd --accept-flake-config
-  nix build .#nomad --accept-flake-config
-  nix build .#nomad-driver-containerd --accept-flake-config
+    echo "Building linux-only packages"
+    for package in "${linux_packages[@]}"; do
+        build_if_needed "$package"
+    done
 fi
-echo "building all other packages"
-nix build .#kine --accept-flake-config
-nix build .#httpie --accept-flake-config
-nix build .#grpcmd --accept-flake-config
-nix build .#terraform --accept-flake-config
-nix build .#vault --accept-flake-config
-nix build .#nomad_1_8 --accept-flake-config
-nix build .#consul --accept-flake-config
-nix build .#boundary --accept-flake-config
-nix build .#packer --accept-flake-config
-nix build .#attic --accept-flake-config
-nix build .#attic-client --accept-flake-config
-nix build .#attic-server --accept-flake-config
-nix build .#zerotierone --accept-flake-config
-if [ $(uname -o) == "Darwin" ]; then
-  echo "Reset flake.nix to nixos-unstable for linux builds"
-  sed -i '' 's/nixpkgs-unstable/nixos-unstable/g' flake.nix
+
+echo "Building common packages"
+for package in "${common_packages[@]}"; do
+    build_if_needed "$package"
+done
+
+if [ "$(uname -s)" == "Darwin" ]; then
+    echo "Reset flake.nix to nixos-unstable for Linux builds"
+    sed -i '' 's/nixpkgs-unstable/nixos-unstable/g' flake.nix
 fi
-attic push tklk result -j 2
