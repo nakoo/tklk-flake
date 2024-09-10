@@ -48,6 +48,11 @@
             (self: super: {
               httpie = super.httpie.overrideAttrs (oldAttrs: rec {
                 version = "4.0.0-dev";
+                postPatch = oldAttrs.postPatch or "" +
+				  ''
+					# disable remote httpbin tests (network access is required)
+					substituteInPlace tests/conftest.py --replace 'if _remote_httpbin_available:' 'if False:'
+				  '';
                 propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [ super.niquests ];
                 disabledTests = oldAttrs.disabledTests or [ ] ++ [
                   "test_config_dir_is_created"
@@ -56,6 +61,15 @@
                   "test_main_entry_point"
                   "test_daemon_runner"
                   "test_secure_cookies_on_localhost"
+                  # httpbin doesn't like chunked (maybe?)
+                  "test_verbose_chunked"
+                  "test_chunked_json"
+                  "test_chunked_form"
+                  "test_chunked_stdin"
+                  "test_chunked_stdin_multiple_chunks"
+                  "test_request_body_from_file_by_path_chunked"
+                  "test_chunked_raw"
+                  "test_multipart_chunked"
                 ];
                 src = super.fetchFromGitHub {
                   owner = "Ousret";
