@@ -13,6 +13,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    # import nixpkgs-unstable for use on darwin
+    nixpkgs-darwin.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     attic = {
       url = "github:zhaofengli/attic";
@@ -24,6 +26,7 @@
     inputs@{
       self,
       nixpkgs,
+      nixpkgs-darwin,
       flake-utils,
       attic,
       ...
@@ -31,63 +34,70 @@
     flake-utils.lib.eachDefaultSystem (
       system:
       let
-        pkgs = import nixpkgs {
-          inherit system;
-          config.allowUnfree = true;
-
-          # some of the python packages need to be included as an overlay to be imported correctly
-          overlays = [
-            (self: super: {
-              urllib3-future = super.python3Packages.callPackage ./pkgs/urllib3-future { };
-              wassima = super.python3Packages.callPackage ./pkgs/wassima { };
-              jh2 = super.python3Packages.callPackage ./pkgs/jh2 { };
-              qh3 = super.python3Packages.callPackage ./pkgs/qh3 { };
-              niquests = super.python3Packages.callPackage ./pkgs/niquests { };
-            })
-            # overlay nixpkgs' httpie
-            (self: super: {
-              httpie = super.httpie.overrideAttrs (oldAttrs: rec {
-                version = "4.0.0-dev";
-                postPatch = oldAttrs.postPatch or "" + ''
-                  # disable remote httpbin tests (network access is required)
-                  substituteInPlace tests/conftest.py --replace 'if _remote_httpbin_available:' 'if False:'
-                '';
-                propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [ super.niquests ];
-                disabledTests = oldAttrs.disabledTests or [ ] ++ [
-                  "test_config_dir_is_created"
-                  "test_ensure_resolver_used"
-                  "test_incomplete_response"
-                  "test_main_entry_point"
-                  "test_daemon_runner"
-                  "test_secure_cookies_on_localhost"
-                  # httpbin doesn't like chunked (maybe?)
-                  "test_verbose_chunked"
-                  "test_chunked_json"
-                  "test_chunked_form"
-                  "test_chunked_stdin"
-                  "test_chunked_stdin_multiple_chunks"
-                  "test_request_body_from_file_by_path_chunked"
-                  "test_chunked_raw"
-                  "test_multipart_chunked"
-                ];
-                src = super.fetchFromGitHub {
-                  owner = "Ousret";
-                  repo = "httpie";
-                  rev = "2e3617ecdbc8cabab404fe3133ae671df8579b04";
-                  hash = "sha256-4TiItfVVJr6uJO8GtjN52NysWzwSJ2+l/Uh1mFE9cx0=";
-                };
-              });
-            })
-            (self: super: {
-              # remove overlay when nomad_1_8 is made as default
-              nomad = super.nomad.overrideAttrs (oldAttrs: rec {
-                meta = oldAttrs.meta // {
-                  platforms = [ nixpkgs.lib.platforms.linux ];
-                };
-              });
-            })
-          ];
-        };
+        # some of the python packages need to be included as an overlay to be imported correctly
+        overlays = [
+          (self: super: {
+            urllib3-future = super.python3Packages.callPackage ./pkgs/urllib3-future { };
+            wassima = super.python3Packages.callPackage ./pkgs/wassima { };
+            jh2 = super.python3Packages.callPackage ./pkgs/jh2 { };
+            qh3 = super.python3Packages.callPackage ./pkgs/qh3 { };
+            niquests = super.python3Packages.callPackage ./pkgs/niquests { };
+          })
+          # overlay nixpkgs' httpie
+          (self: super: {
+            httpie = super.httpie.overrideAttrs (oldAttrs: rec {
+              version = "4.0.0-dev";
+              postPatch = oldAttrs.postPatch or "" + ''
+                # disable remote httpbin tests (network access is required)
+                substituteInPlace tests/conftest.py --replace 'if _remote_httpbin_available:' 'if False:'
+              '';
+              propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [ super.niquests ];
+              disabledTests = oldAttrs.disabledTests or [ ] ++ [
+                "test_config_dir_is_created"
+                "test_ensure_resolver_used"
+                "test_incomplete_response"
+                "test_main_entry_point"
+                "test_daemon_runner"
+                "test_secure_cookies_on_localhost"
+                # httpbin doesn't like chunked (maybe?)
+                "test_verbose_chunked"
+                "test_chunked_json"
+                "test_chunked_form"
+                "test_chunked_stdin"
+                "test_chunked_stdin_multiple_chunks"
+                "test_request_body_from_file_by_path_chunked"
+                "test_chunked_raw"
+                "test_multipart_chunked"
+              ];
+              src = super.fetchFromGitHub {
+                owner = "Ousret";
+                repo = "httpie";
+                rev = "2e3617ecdbc8cabab404fe3133ae671df8579b04";
+                hash = "sha256-4TiItfVVJr6uJO8GtjN52NysWzwSJ2+l/Uh1mFE9cx0=";
+              };
+            });
+          })
+          (self: super: {
+            # remove overlay when nomad_1_8 is made as default
+            nomad = super.nomad.overrideAttrs (oldAttrs: rec {
+              meta = oldAttrs.meta // {
+                platforms = [ nixpkgs.lib.platforms.linux ];
+              };
+            });
+          })
+        ];
+        # Determine if the system is Darwin
+        pkgs = if builtins.match ".*-darwin" system != null
+              then import nixpkgs-darwin {
+                inherit system;
+                config.allowUnfree = true;
+                overlays = overlays;
+              }
+              else import nixpkgs {
+                inherit system;
+                config.allowUnfree = true;
+                overlays = overlays;
+              };
         pythonPackages = pkgs.python3Packages;
         # Script to push packages to Attic
         pushPackagesScript = pkgs.writeShellApplication {
