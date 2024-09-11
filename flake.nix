@@ -113,7 +113,7 @@
 
             check_in_cache() {
               local output_path="$1"
-              nix-store --query --store "$CACHE_URL" "$output_path" > /dev/null 2>&1
+              nix-store --query --store "$CACHE_URL" "$output_path" | cat
               return $?
             }
 
