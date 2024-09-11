@@ -58,6 +58,9 @@ buildPythonPackage rec {
 
     "test_connect_timeout"
     "test_total_timeout_connect"
+
+    # fails due to temporary issue with remote config
+    "test_ensure_http3_default"
   ];
 
   nativeCheckInputs = [

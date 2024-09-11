@@ -112,8 +112,6 @@
             #!/usr/bin/env bash
             set -euo pipefail
 
-            CACHE_URL="http://cache.tklk.dev/tklk"
-
             # Push flake inputs
             nix flake archive --json | jq -r '.path,(.inputs|to_entries[].value.path)' | xargs -I {} attic push tklk {}
 
@@ -121,40 +119,19 @@
             CURRENT_SYSTEM="${system}"
             PACKAGES=$(nix flake show --json . 2>/dev/null | jq -r --arg cur_sys "$CURRENT_SYSTEM" '.packages[$cur_sys]|(try keys[] catch "")')
 
-            check_in_cache() {
-              local output_path="$1"
-              export PAGER=cat
-              nix-store --query --store "$CACHE_URL" "$output_path"
-              return $?
-            }
-
             if [ -n "$PACKAGES" ]; then
               echo "$PACKAGES" | while read -r pkg; do
                 echo "Checking package: $pkg"
 
-                # Get the derivation path using nix eval
-                DRV_PATH=$(nix eval --raw .#"$pkg".drvPath 2>/dev/null)
+                # Get the store paths for the package (there might be multiple outputs)
+                readarray -t STORE_PATHS < <(nix build --accept-flake-config --print-out-paths .#"$pkg")
 
-                # Get the output paths without building
-                OUT_PATHS=$(nix-store --query --outputs "$DRV_PATH")
-
-                NEED_BUILD=false
-                for OUT_PATH in $OUT_PATHS; do
-                  if ! check_in_cache "$OUT_PATH"; then
-                    NEED_BUILD=true
-                    break
-                  fi
+                for STORE_PATH in "''${STORE_PATHS[@]}"; do
+                  # Remove any trailing newline
+                  STORE_PATH=$(echo -n "$STORE_PATH" | tr -d '\n')
+                  echo "Pushing $pkg to cache..."
+                  nix-store -qR "$STORE_PATH" | xargs -I {} attic push tklk {}
                 done
-
-                if [ "$NEED_BUILD" = true ]; then
-                  echo "Building $pkg and pushing to cache..."
-                  nix build --no-link --accept-flake-config .#"$pkg" 2>/dev/null
-                  for OUT_PATH in $OUT_PATHS; do
-                    nix-store -qR "$OUT_PATH" | xargs -I {} attic push tklk {}
-                  done
-                else
-                  echo "Package $pkg already exists in cache, skipping..."
-                fi
               done
             fi
           '';
@@ -181,6 +158,7 @@
           # non-free packages to cache in personal binary store
           terraform = pkgs.terraform;
           vault = pkgs.vault;
+          vault-bin = pkgs.vault-bin;
           nomad = pkgs.nomad;
           nomad_1_8 = pkgs.nomad_1_8;
           consul = pkgs.consul;
