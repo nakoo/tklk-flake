@@ -123,7 +123,8 @@
 
             check_in_cache() {
               local output_path="$1"
-              nix-store --query --store "$CACHE_URL" "$output_path" | cat
+              export PAGER=cat
+              nix-store --query --store "$CACHE_URL" "$output_path"
               return $?
             }
 
