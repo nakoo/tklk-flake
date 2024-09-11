@@ -48,11 +48,10 @@
             (self: super: {
               httpie = super.httpie.overrideAttrs (oldAttrs: rec {
                 version = "4.0.0-dev";
-                postPatch = oldAttrs.postPatch or "" +
-				  ''
-					# disable remote httpbin tests (network access is required)
-					substituteInPlace tests/conftest.py --replace 'if _remote_httpbin_available:' 'if False:'
-				  '';
+                postPatch = oldAttrs.postPatch or "" + ''
+                  # disable remote httpbin tests (network access is required)
+                  substituteInPlace tests/conftest.py --replace 'if _remote_httpbin_available:' 'if False:'
+                '';
                 propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [ super.niquests ];
                 disabledTests = oldAttrs.disabledTests or [ ] ++ [
                   "test_config_dir_is_created"
@@ -79,12 +78,77 @@
                 };
               });
             })
+            (self: super: {
+              # remove overlay when nomad_1_8 is made as default
+              nomad = super.nomad.overrideAttrs (oldAttrs: rec {
+                meta = oldAttrs.meta // {
+                  platforms = [ nixpkgs.lib.platforms.linux ];
+                };
+              });
+            })
           ];
         };
         pythonPackages = pkgs.python3Packages;
-      in
-      {
-        packages = {
+        # Script to push packages to Attic
+        pushPackagesScript = pkgs.writeShellApplication {
+          name = "push-packages";
+          runtimeInputs = with pkgs; [
+            jq
+            nix
+            attic
+            coreutils
+          ];
+          text = ''
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            CACHE_URL="http://cache.tklk.dev/tklk"
+
+            # Push flake inputs
+            nix flake archive --json | jq -r '.path,(.inputs|to_entries[].value.path)' | xargs -I {} attic push tklk {}
+
+            # Get packages for the current system
+            CURRENT_SYSTEM="${system}"
+            PACKAGES=$(nix flake show --json . 2>/dev/null | jq -r --arg cur_sys "$CURRENT_SYSTEM" '.packages[$cur_sys]|(try keys[] catch "")')
+
+            check_in_cache() {
+              local output_path="$1"
+              nix-store --query --store "$CACHE_URL" "$output_path" > /dev/null 2>&1
+              return $?
+            }
+
+            if [ -n "$PACKAGES" ]; then
+              echo "$PACKAGES" | while read -r pkg; do
+                echo "Checking package: $pkg"
+
+                # Get the derivation path using nix eval
+                DRV_PATH=$(nix eval --raw .#"$pkg".drvPath 2>/dev/null)
+
+                # Get the output paths without building
+                OUT_PATHS=$(nix-store --query --outputs "$DRV_PATH")
+
+                NEED_BUILD=false
+                for OUT_PATH in $OUT_PATHS; do
+                  if ! check_in_cache "$OUT_PATH"; then
+                    NEED_BUILD=true
+                    break
+                  fi
+                done
+
+                if [ "$NEED_BUILD" = true ]; then
+                  echo "Building $pkg and pushing to cache..."
+                  nix build --no-link --accept-flake-config .#"$pkg" 2>/dev/null
+                  for OUT_PATH in $OUT_PATHS; do
+                    nix-store -qR "$OUT_PATH" | xargs -I {} attic push tklk {}
+                  done
+                else
+                  echo "Package $pkg already exists in cache, skipping..."
+                fi
+              done
+            fi
+          '';
+        };
+        allPackages = {
           # python packages
           jh2 = pythonPackages.callPackage ./pkgs/jh2 { };
           niquests = pythonPackages.callPackage ./pkgs/niquests { };
@@ -121,6 +185,21 @@
           attic = attic.packages.${system}.attic;
           attic-client = attic.packages.${system}.attic-client;
           attic-server = attic.packages.${system}.attic-server;
+        };
+        # Helper function to check if a package is supported on the current system
+        isSupported = pkg: (pkg.meta.platforms or [ ]) == [ ] || builtins.elem system pkg.meta.platforms;
+        # Filter packages based on system support
+        supportedPackages = nixpkgs.lib.filterAttrs (name: pkg:
+          pkg != null && isSupported pkg
+        ) allPackages;
+      in
+      {
+        packages = supportedPackages;
+        apps = {
+          push-packages = {
+            type = "app";
+            program = "${pushPackagesScript}/bin/push-packages";
+          };
         };
       }
     );

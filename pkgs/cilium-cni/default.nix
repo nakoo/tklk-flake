@@ -17,4 +17,7 @@ buildGoModule rec {
   };
   vendorHash = null;
   sourceRoot = "source/plugins/cilium-cni";
+  meta = {
+    platforms = lib.platforms.linux;
+  };
 }

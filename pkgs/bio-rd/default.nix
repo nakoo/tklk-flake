@@ -28,4 +28,7 @@ buildGoModule rec {
     "-s"
     "-w"
   ];
+  meta = {
+    platforms = lib.platforms.linux;
+  };
 }
