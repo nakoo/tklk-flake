@@ -148,6 +148,7 @@
           httpie = pkgs.httpie;
 
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
+          consul-cni = pkgs.callPackage ./pkgs/consul-cni { };
           grpcmd = pkgs.callPackage ./pkgs/grpcmd { };
           kine = pkgs.callPackage ./pkgs/kine { };
           bio-rd = pkgs.callPackage ./pkgs/bio-rd { };
