@@ -152,9 +152,6 @@
           grpcmd = pkgs.callPackage ./pkgs/grpcmd { };
           kine = pkgs.callPackage ./pkgs/kine { };
           bio-rd = pkgs.callPackage ./pkgs/bio-rd { };
-
-          # pending merge of PR: https://github.com/NixOS/nixpkgs/pull/330775
-          nomad-driver-containerd = pkgs.callPackage ./pkgs/nomad-driver-containerd { };
           tc-redirect-tap = pkgs.callPackage ./pkgs/tc-redirect-tap { };
 
           # non-free packages to cache in personal binary store
