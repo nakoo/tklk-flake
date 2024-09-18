@@ -90,6 +90,32 @@
             });
             # change default to 1.8
             nomad = super.nomad_1_8;
+            # temporary, until PR #331913 is merged
+            boundary = super.boundary.overrideAttrs (oldAttrs: rec {
+              version = "0.17.1";
+              src =
+                let
+                  inherit (super.stdenv.hostPlatform) system;
+                  selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+                  suffix = selectSystem {
+                    x86_64-linux = "linux_amd64";
+                    aarch64-linux = "linux_arm64";
+                    x86_64-darwin = "darwin_amd64";
+                    aarch64-darwin = "darwin_arm64";
+                  };
+                  hash = selectSystem {
+                    x86_64-linux = "sha256-U7ZCmpmcZpgLkf2jwc35Q9jezxUzaKp85WX2Tqs5IFI=";
+                    aarch64-linux = "sha256-gYbeC+f/EXfhzUtwojjvyEATri1XpHpu+JPQtj4oRb4=";
+                    x86_64-darwin = "sha256-N6Uy5JiU9mW1/muHYF6Rf1KLX1iXYt/5ct1IHeFUgds=";
+                    aarch64-darwin = "sha256-Oxfzy/9ggcJXS+tXiYmJXSiqbMKw4vv9RMquUuOlJ08=";
+                  };
+                in
+                super.fetchzip {
+                  url = "https://releases.hashicorp.com/boundary/${version}/boundary_${version}_${suffix}.zip";
+                  inherit hash;
+                  stripRoot = false;
+                };
+            });
           })
         ];
         # Determine if the system is Darwin
