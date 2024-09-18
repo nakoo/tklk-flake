@@ -88,8 +88,6 @@
               };
               vendorHash = "sha256-0mnhZeiCLAWvwAoNBJtwss85vhYCrf/5I1AhyXTFnWk=";
             });
-            # change default to 1.8
-            nomad = super.nomad_1_8;
             # temporary, until PR #331913 is merged
             boundary = super.boundary.overrideAttrs (oldAttrs: rec {
               version = "0.17.1";
@@ -116,6 +114,10 @@
                   stripRoot = false;
                 };
             });
+          })
+          (self: super: {
+            # change default to 1.8
+            nomad = super.nomad_1_8;
           })
         ];
         # Determine if the system is Darwin
