@@ -13,22 +13,22 @@
 
 buildPythonPackage rec {
   pname = "wassima";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
-
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-HSYEqECwlXrPrSIBYx7i+pV6B5QTAR+RFbybEELo2SM=";
-  };
 
   src = fetchFromGitHub {
     owner = "jawah";
     repo = pname;
     rev = version;
-    hash = "sha256-bfwDau2PwmvZHjIsUmNjNs2h0+bsnHpb1qV2Lv6v4b0=";
+    hash = "sha256-0TYrrjQwNje51IZpwrbqa5W7RkLL1LRXNsrB7TzL0io=";
+  };
+
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit src;
+    name = "${pname}-${version}";
+    hash = "sha256-PVkcISQca7oGwnJP6BrTVMn+z1wLP9KPpLtTCf5IB0M=";
   };
 
   nativeBuildInputs =
