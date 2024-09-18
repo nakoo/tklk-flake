@@ -171,6 +171,11 @@
           '';
         };
         allPackages = {
+          # pre-build attic binaries
+          attic = attic.packages.${system}.attic;
+          attic-client = attic.packages.${system}.attic-client;
+          attic-server = attic.packages.${system}.attic-server;
+
           # python packages
           jh2 = pythonPackages.callPackage ./pkgs/jh2 { };
           niquests = pythonPackages.callPackage ./pkgs/niquests { };
@@ -178,14 +183,14 @@
           urllib3-future = pythonPackages.callPackage ./pkgs/urllib3-future { };
           wassima = pythonPackages.callPackage ./pkgs/wassima { };
 
-          # export httpie with niquests support (aka http2&3 support)
+          # httpie with niquests support (aka http2&3 support)
           httpie = pkgs.httpie;
 
+          # cloud native tools
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
           consul-cni = pkgs.callPackage ./pkgs/consul-cni { };
           grpcmd = pkgs.callPackage ./pkgs/grpcmd { };
           kine = pkgs.callPackage ./pkgs/kine { };
-          bio-rd = pkgs.callPackage ./pkgs/bio-rd { };
           tc-redirect-tap = pkgs.callPackage ./pkgs/tc-redirect-tap { };
 
           # non-free packages to cache in personal binary store
@@ -202,11 +207,6 @@
 
           sublime4 = pkgs.callPackage ./pkgs/sublimetext4 { };
           sublime4-dev = pkgs.callPackage ./pkgs/sublimetext4 { dev = true; };
-
-          # pre-build attic binaries
-          attic = attic.packages.${system}.attic;
-          attic-client = attic.packages.${system}.attic-client;
-          attic-server = attic.packages.${system}.attic-server;
         };
         # Helper function to check if a package is supported on the current system
         isSupported = pkg: (pkg.meta.platforms or [ ]) == [ ] || builtins.elem system pkg.meta.platforms;
