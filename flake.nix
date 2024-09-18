@@ -78,12 +78,18 @@
             });
           })
           (self: super: {
-            # remove overlay when nomad_1_8 is made as default
-            nomad = super.nomad.overrideAttrs (oldAttrs: rec {
-              meta = oldAttrs.meta // {
-                platforms = [ nixpkgs.lib.platforms.linux ];
+            nomad_1_8 = super.nomad.overrideAttrs (oldAttrs: rec {
+              version = "1.8.4";
+              src = super.fetchFromGitHub {
+                owner = "hashicorp";
+                repo = "nomad";
+                rev = "v${version}";
+                hash = "sha256-BzLvALD65VqWNB9gx4BgI/mYWLNeHzp6WSXD/1Xf0Wk=";
               };
+              vendorHash = "sha256-0mnhZeiCLAWvwAoNBJtwss85vhYCrf/5I1AhyXTFnWk=";
             });
+            # change default to 1.8
+            nomad = super.nomad_1_8;
           })
         ];
         # Determine if the system is Darwin
