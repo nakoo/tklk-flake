@@ -125,17 +125,6 @@
                   stripRoot = false;
                 };
             });
-            # temporary, until PR #342837 is merged
-            terraform = super.terraform.overrideAttrs (oldAttrs: rec {
-              version = "1.9.6";
-              src = super.fetchFromGitHub {
-                owner = "hashicorp";
-                repo = "terraform";
-                rev = "v${version}";
-                hash =  "sha256-rlqpqiMlLcn2LqqKRU9iFaVqUz/QQtpiiZ39h5ZvpbI=";
-              };
-              vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
-            });
           })
           (self: super: {
             # change default to 1.8
