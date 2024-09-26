@@ -99,6 +99,44 @@
               };
               vendorHash = "sha256-Rt0T6cCMzO4YBFF6/9xeCZcsqziDmxPMNirHLqepwek=";
             });
+            # temporary, until PR #344555 is merged
+            vault = super.vault.overrideAttrs (oldAttrs: rec {
+              version = "1.17.6";
+              src = super.fetchFromGitHub {
+                owner = "hashicorp";
+                repo = "vault";
+                rev = "v${version}";
+                hash = "sha256-sd4gNNJ/DVpl7ReymykNemWz4NNisofMIH6lLNl+iVw=";
+              };
+              vendorHash = "sha256-V7aMf03U2DTNg1murp4LBfuOioA+7iG6jX9o05rhM2U=";
+            });
+            vault-bin = super.vault-bin.overrideAttrs (oldAttrs: rec {
+              version = "0.17.6";
+              src =
+                let
+                  inherit (stdenv.hostPlatform) system;
+                  selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
+                  suffix = selectSystem {
+                    x86_64-linux = "linux_amd64";
+                    aarch64-linux = "linux_arm64";
+                    i686-linux = "linux_386";
+                    x86_64-darwin = "darwin_amd64";
+                    aarch64-darwin = "darwin_arm64";
+                  };
+                  hash = selectSystem {
+                    x86_64-linux = "sha256-K9yNZ4M8u8FfisWi6Y6TsBJy6FQytr3htNCsKh2MlyA=";
+                    aarch64-linux = "sha256-KLHkxUGvekHT/bPtoIlmylCubTWH+I7Q0wJM0UG0Hp8=";
+                    i686-linux = "sha256-jBS/nGKP27weFw4u6Q10athYwCqWLzpb7ph39v+QAN8=";
+                    x86_64-darwin = "sha256-5KfWqtJldk66dO5ImYKivDau4JzacUIXBfAzWkkPfoE=";
+                    aarch64-darwin = "sha256-wjmNY1lunJDjpkWDXl0upAeNBqBx8momlY4a3j+hMd0=";
+                  };
+                in
+                fetchzip {
+                  url = "https://releases.hashicorp.com/vault/${version}/vault_${version}_${suffix}.zip";
+                  stripRoot = false;
+                  inherit hash;
+                };
+            });
             # temporary, until PR #331913 is merged
             boundary = super.boundary.overrideAttrs (oldAttrs: rec {
               version = "0.17.1";
