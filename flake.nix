@@ -111,7 +111,7 @@
               vendorHash = "sha256-V7aMf03U2DTNg1murp4LBfuOioA+7iG6jX9o05rhM2U=";
             });
             vault-bin = super.vault-bin.overrideAttrs (oldAttrs: rec {
-              version = "0.17.6";
+              version = "1.17.6";
               src =
                 let
                   inherit (super.stdenv.hostPlatform) system;
