@@ -114,7 +114,7 @@
               version = "0.17.6";
               src =
                 let
-                  inherit (stdenv.hostPlatform) system;
+                  inherit (super.stdenv.hostPlatform) system;
                   selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
                   suffix = selectSystem {
                     x86_64-linux = "linux_amd64";
