@@ -131,7 +131,7 @@
                     aarch64-darwin = "sha256-wjmNY1lunJDjpkWDXl0upAeNBqBx8momlY4a3j+hMd0=";
                   };
                 in
-                fetchzip {
+                super.fetchzip {
                   url = "https://releases.hashicorp.com/vault/${version}/vault_${version}_${suffix}.zip";
                   stripRoot = false;
                   inherit hash;
