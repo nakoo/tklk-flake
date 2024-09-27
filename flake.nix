@@ -248,6 +248,7 @@
           vault-bin = pkgs.vault-bin;
           nomad = pkgs.nomad;
           nomad_1_8 = pkgs.nomad_1_8;
+          nomad_1_9 = pkgs.callPackage ./pkgs/nomad_1_9 { };
           consul = pkgs.consul;
           boundary = pkgs.boundary;
           packer = pkgs.packer;
