@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "qh3";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,13 +26,12 @@ buildPythonPackage rec {
     owner = "jawah";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-I15V8lq0vo97PM9huhzSzBQFjM3IHygze87fcbDdGWY=";
+    hash = "sha256-CBN9FnV2sq/qp0u/ap1IYIkr04LJjqiEarGyE1vhvJQ=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ls-qpack-sys-0.1.4" = "sha256-N4vSmLkkNKM1OW3NhvF4IBlSL6LMBbyV+08B09EbLR0=";
       "ls-qpack-0.1.4" = "sha256-N4vSmLkkNKM1OW3NhvF4IBlSL6LMBbyV+08B09EbLR0=";
     };
   };
