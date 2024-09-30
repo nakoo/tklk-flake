@@ -19,7 +19,7 @@ buildGoModule rec {
     "cmd/tc-redirect-tap"
   ];
   vendorHash = "sha256-MGGNYgHGyXKuIVNCaH60++bF72Glewfx4Eqgs27uvnE=";
-  meta = with lib;{
+  meta = with lib; {
     mainProgram = "tc-redirect-tap";
     homepage = "https://github.com/awslabs/tc-redirect-tap";
     description = "A CNI plugin that allows you to adapt pre-existing CNI plugins/configuration to a tap device";

@@ -47,10 +47,12 @@
           (self: super: {
             httpie = super.httpie.overrideAttrs (oldAttrs: rec {
               version = "4.0.0-dev";
-              postPatch = oldAttrs.postPatch or "" + ''
-                # disable remote httpbin tests (network access is required)
-                substituteInPlace tests/conftest.py --replace 'if _remote_httpbin_available:' 'if False:'
-              '';
+              postPatch =
+                oldAttrs.postPatch or ""
+                + ''
+                  # disable remote httpbin tests (network access is required)
+                  substituteInPlace tests/conftest.py --replace 'if _remote_httpbin_available:' 'if False:'
+                '';
               propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [ super.niquests ];
               disabledTests = oldAttrs.disabledTests or [ ] ++ [
                 "test_config_dir_is_created"
@@ -94,7 +96,7 @@
               src = super.fetchFromGitHub {
                 owner = "hashicorp";
                 repo = "nomad-pack";
-                rev = "3c0178a561b360906c591718edb25ae25ae9d964";  # nightly tag as of 2024-09-23
+                rev = "3c0178a561b360906c591718edb25ae25ae9d964"; # nightly tag as of 2024-09-23
                 hash = "sha256-8erw+8ZTpf8Dc9m6t5NeRgwOETkjXN/wVhoZ4g0uWhg=";
               };
               vendorHash = "sha256-Rt0T6cCMzO4YBFF6/9xeCZcsqziDmxPMNirHLqepwek=";
@@ -170,17 +172,19 @@
           })
         ];
         # Determine if the system is Darwin
-        pkgs = if builtins.match ".*-darwin" system != null
-              then import nixpkgs-darwin {
-                inherit system;
-                config.allowUnfree = true;
-                overlays = overlays;
-              }
-              else import nixpkgs {
-                inherit system;
-                config.allowUnfree = true;
-                overlays = overlays;
-              };
+        pkgs =
+          if builtins.match ".*-darwin" system != null then
+            import nixpkgs-darwin {
+              inherit system;
+              config.allowUnfree = true;
+              overlays = overlays;
+            }
+          else
+            import nixpkgs {
+              inherit system;
+              config.allowUnfree = true;
+              overlays = overlays;
+            };
         pythonPackages = pkgs.python3Packages;
         # Script to push packages to Attic
         pushPackagesScript = pkgs.writeShellApplication {
@@ -262,9 +266,7 @@
         # Helper function to check if a package is supported on the current system
         isSupported = pkg: (pkg.meta.platforms or [ ]) == [ ] || builtins.elem system pkg.meta.platforms;
         # Filter packages based on system support
-        supportedPackages = nixpkgs.lib.filterAttrs (name: pkg:
-          pkg != null && isSupported pkg
-        ) allPackages;
+        supportedPackages = nixpkgs.lib.filterAttrs (name: pkg: pkg != null && isSupported pkg) allPackages;
       in
       {
         packages = supportedPackages;
