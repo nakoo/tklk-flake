@@ -211,7 +211,7 @@
                 echo "Checking package: $pkg"
 
                 # Get the store paths for the package (there might be multiple outputs)
-                readarray -t STORE_PATHS < <(nix build --accept-flake-config --print-out-paths .#"$pkg")
+                readarray -t STORE_PATHS < <(nix build -L --accept-flake-config --print-out-paths .#"$pkg")
 
                 for STORE_PATH in "''${STORE_PATHS[@]}"; do
                   # Remove any trailing newline
