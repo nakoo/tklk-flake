@@ -223,6 +223,7 @@
             fi
           '';
         };
+        
         allPackages = {
           # pre-build attic binaries
           attic = attic.packages.${system}.attic;
@@ -262,6 +263,9 @@
 
           sublime4 = pkgs.callPackage ./pkgs/sublimetext4 { };
           sublime4-dev = pkgs.callPackage ./pkgs/sublimetext4 { dev = true; };
+
+          # darwin specific
+          swift_6 = (nixpkgs.lib.recurseIntoAttrs (pkgs.callPackage ./pkgs/swift_6 { })).swift_6;
         };
         # Helper function to check if a package is supported on the current system
         isSupported = pkg: (pkg.meta.platforms or [ ]) == [ ] || builtins.elem system pkg.meta.platforms;
