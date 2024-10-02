@@ -20,14 +20,6 @@ buildGoModule rec {
     "cmd/tc-redirect-tap"
   ];
   vendorHash = "sha256-MGGNYgHGyXKuIVNCaH60++bF72Glewfx4Eqgs27uvnE=";
-  passthrough = {
-    update-script = ''
-      #!/usr/bin/env bash
-      set -euo pipefail
-      # skipping updates
-      exit 0
-    '';
-  };
   meta = with lib; {
     mainProgram = "tc-redirect-tap";
     homepage = "https://github.com/awslabs/tc-redirect-tap";

@@ -18,8 +18,4 @@ buildGoModule rec {
   };
   vendorHash = "sha256-T+jtxubVKskrLGTUa4RI24o/WTSFCBk60HhyCFujPOI=";
   subPackages = [ "cmd/goat" ];
-#   postInstall = ''
-#     mkdir -p $out/bin
-#     mv $out/bin/cni $out/bin/consul-cni
-#   '';
 }

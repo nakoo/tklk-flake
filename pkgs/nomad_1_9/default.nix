@@ -38,24 +38,6 @@ buildGo123Module rec {
     installShellCompletion nomad.bash
   '';
 
-  passthrough = {
-    update-script = ''
-      #!/usr/bin/env bash
-      set -euo pipefail
-
-      # Fetch the latest available version via nix-update
-      LATEST_VERSION=$(nix run github:Mic92/nix-update -- -F "$pname" --print-only)
-
-      # Use semver-tool to compare versions
-      if semver compare "$LATEST_VERSION" ">$version"; then
-        echo "Newer version found: $LATEST_VERSION. Updating..."
-        nix run github:Mic92/nix-update -- -F "$pname" --build
-      else
-        echo "No update required. Current version ($version) is newer or equal."
-      fi
-    '';
-  };
-
   buildInputs = [ nix-update semver-tool ];
 
   meta = {
