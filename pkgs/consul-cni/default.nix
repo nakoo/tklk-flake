@@ -3,6 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  nix-update,
   ...
 }:
 
@@ -21,6 +22,14 @@ buildGoModule rec {
     mkdir -p $out/bin
     mv $out/bin/cni $out/bin/consul-cni
   '';
+  passthrough = {
+    update-script = ''
+      #!/usr/bin/env bash
+      set -euo pipefail
+      # skipping updates
+      exit 0
+    '';
+  };
   meta = {
     platforms = lib.platforms.linux;
   };
