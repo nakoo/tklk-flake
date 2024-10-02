@@ -236,14 +236,14 @@
 
             # get packages by folder name under pkgs directory
             PACKAGES=$(find ./pkgs -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
-            PACKAGES+=" nomad_1_9"
+            PACKAGES+=" " # add packages here that are only define in flake.nix (such as nomad_1_8 bump)
             
             if [ -n "$PACKAGES" ]; then
               echo "$PACKAGES" | while read -r pkg; do
                 echo "Checking package: $pkg"
                 if nix eval ".#$pkg" --json >/dev/null 2>&1; then
                   # FIXME: pin to a specific version of nix-update
-                  nix run github:Mic92/nix-update -- -F "$pkg" --build
+                  nix run github:Mic92/nix-update -- -F "$pkg"
                 fi
               done
             fi
