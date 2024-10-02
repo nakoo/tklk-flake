@@ -272,6 +272,8 @@
           kine = pkgs.callPackage ./pkgs/kine { };
           tc-redirect-tap = pkgs.callPackage ./pkgs/tc-redirect-tap { };
 
+          goat = pkgs.callPackage ./pkgs/goat { };
+
           # non-free packages to cache in personal binary store
           terraform = pkgs.terraform;
           vault = pkgs.vault;
