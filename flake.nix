@@ -101,6 +101,17 @@
               };
               vendorHash = "sha256-Rt0T6cCMzO4YBFF6/9xeCZcsqziDmxPMNirHLqepwek=";
             });
+            # temporary, until PR #345989 is merged
+            terraform = super.terraform.overrideAttrs (oldAttrs: rec {
+              version = "1.9.7";
+              src = super.fetchFromGitHub {
+                owner = "hashicorp";
+                repo = "terraform";
+                rev = "v${version}";
+                hash = "sha256-L0F0u96et18IlqAUsc0HK+cLeav2OqN4kxs58hPNMIM=";
+              };
+              vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
+            });
             # temporary, until PR #344555 is merged
             vault = super.vault.overrideAttrs (oldAttrs: rec {
               version = "1.17.6";
