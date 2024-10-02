@@ -8,14 +8,14 @@
 
 buildGoModule rec {
   pname = "kine";
-  version = "0.13.1";
+  version = "0.13.2";
   src = fetchFromGitHub {
     owner = "k3s-io";
     repo = "kine";
     rev = "v${version}";
-    hash = "sha256-krBeNuEoDseqzSSqgRMNuvetbvZJYttcg0C/4uA3/uA=";
+    hash = "sha256-KMyO9zZvQFyRaMtQ/d2Zgg6pG1SFIYWkzZgSZIqhiOQ=";
   };
-  vendorHash = "sha256-QvexsR27CTcqvkbLLlp5/TNMV5cqVTScMHhcljZzhTI=";
+  vendorHash = "sha256-kbMwLNBPJwFbUSZdYiWWdIZM8fclHDnRnxTTIXTIuHU=";
   ldflags = [
     "-s"
     "-w"
