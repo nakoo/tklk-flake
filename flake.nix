@@ -223,6 +223,32 @@
             fi
           '';
         };
+        updatePackagesScript = pkgs.writeShellApplication {
+          name = "update-packages";
+          runtimeInputs = with pkgs; [
+            jq
+            nix
+            coreutils
+          ];
+          text = ''
+            #!/usr/bin/env bash
+            set -euo pipefail
+
+            # get packages by folder name under pkgs directory
+            PACKAGES=$(find ./pkgs -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
+            PACKAGES+=" nomad_1_9"
+            
+            if [ -n "$PACKAGES" ]; then
+              echo "$PACKAGES" | while read -r pkg; do
+                echo "Checking package: $pkg"
+                if nix eval ".#$pkg" --json >/dev/null 2>&1; then
+                  # FIXME: pin to a specific version of nix-update
+                  nix run github:Mic92/nix-update -- -F "$pkg" --build
+                fi
+              done
+            fi
+          '';
+        };
         allPackages = {
           # pre-build attic binaries
           attic = attic.packages.${system}.attic;
@@ -274,6 +300,10 @@
           push-packages = {
             type = "app";
             program = "${pushPackagesScript}/bin/push-packages";
+          };
+          update-packages = {
+            type = "app";
+            program = "${updatePackagesScript}/bin/update-packages";
           };
         };
       }
