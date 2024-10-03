@@ -291,6 +291,9 @@
           # httpie with niquests support (aka http2&3 support)
           httpie = pkgs.httpie;
 
+          go_1_22 = pkgs.go_1_22;
+          go_1_23 = pkgs.go_1_23;
+
           # cloud native tools
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
           consul-cni = pkgs.callPackage ./pkgs/consul-cni { };
