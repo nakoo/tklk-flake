@@ -112,6 +112,21 @@
               };
               vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
             });
+            # temporary, until PR hydra builds the merged PR
+            go_1_22 = super.go_1_22.overrideAttrs (oldAttrs: rec {
+              version = "1.22.8";
+              src = super.fetchurl {
+                url = "https://go.dev/dl/go${version}.src.tar.gz";
+                hash = "sha256-3xLCPr8Z3qD0v0aiLL7aSj7Kb0dPMYOQzndJdCeEQLg=";
+              };
+            });
+            go_1_23 = super.go_1_23.overrideAttrs (oldAttrs: rec {
+              version = "1.23.2";
+              src = super.fetchurl {
+                url = "https://go.dev/dl/go${version}.src.tar.gz";
+                hash = "sha256-NpMBYqk99BfZC9IsbhTa/0cFuqwrAkGO3aZxzfqc0H8=";
+              };
+            });
             # temporary, until PR #344555 is merged
             vault = super.vault.overrideAttrs (oldAttrs: rec {
               version = "1.17.6";
