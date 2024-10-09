@@ -16,6 +16,6 @@ buildGoModule rec {
     rev = "06bacb465af714feb77609566aba15ab1ed41e24"; # repo isn't tagged, so use commit refs
     hash = "sha256-wWsE3sAGZQmOBVqTgy4RjoU8zmtuvyQIj9DjwSbtmKw=";
   };
-  vendorHash = "sha256-wWsE3sAGZQmOBVqTgy4RjoU8zmtuvyQIj9DjwSbtmKw=";
+  vendorHash = "sha256-T+jtxubVKskrLGTUa4RI24o/WTSFCBk60HhyCFujPOI=";
   subPackages = [ "cmd/goat" ];
 }
