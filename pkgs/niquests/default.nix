@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "niquests";
-  version = "3.8.0";
+  version = "3.9.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-LV3F3udNv/EYEAqtvwfjek/3TPQu7Nexpv8rRGxHy8E=";
+    hash = "sha256-70YfzDjcbq3oIV5ZCWWTukJfdI7SLiAID3C+jH2f5yQ=";
   };
 
   dependencies = [
