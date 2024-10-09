@@ -187,7 +187,6 @@
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
           consul-cni = pkgs.callPackage ./pkgs/consul-cni { };
           grpcmd = pkgs.callPackage ./pkgs/grpcmd { };
-          kine = pkgs.callPackage ./pkgs/kine { };
           tc-redirect-tap = pkgs.callPackage ./pkgs/tc-redirect-tap { };
 
           goat = pkgs.callPackage ./pkgs/goat { };
