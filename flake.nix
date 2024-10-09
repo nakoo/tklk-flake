@@ -80,16 +80,6 @@
             });
           })
           (self: super: {
-            nomad_1_8 = super.nomad.overrideAttrs (oldAttrs: rec {
-              version = "1.8.4";
-              src = super.fetchFromGitHub {
-                owner = "hashicorp";
-                repo = "nomad";
-                rev = "v${version}";
-                hash = "sha256-BzLvALD65VqWNB9gx4BgI/mYWLNeHzp6WSXD/1Xf0Wk=";
-              };
-              vendorHash = "sha256-0mnhZeiCLAWvwAoNBJtwss85vhYCrf/5I1AhyXTFnWk=";
-            });
             # temporary, until PR #344262 is merged
             nomad-pack = super.nomad-pack.overrideAttrs (oldAttrs: rec {
               version = "nightly-2024-09-23";
@@ -100,17 +90,6 @@
                 hash = "sha256-8erw+8ZTpf8Dc9m6t5NeRgwOETkjXN/wVhoZ4g0uWhg=";
               };
               vendorHash = "sha256-Rt0T6cCMzO4YBFF6/9xeCZcsqziDmxPMNirHLqepwek=";
-            });
-            # temporary, until PR #345989 is merged
-            terraform = super.terraform.overrideAttrs (oldAttrs: rec {
-              version = "1.9.7";
-              src = super.fetchFromGitHub {
-                owner = "hashicorp";
-                repo = "terraform";
-                rev = "v${version}";
-                hash = "sha256-L0F0u96et18IlqAUsc0HK+cLeav2OqN4kxs58hPNMIM=";
-              };
-              vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
             });
             # temporary, until PR hydra builds the merged PR
             go_1_22 = super.go_1_22.overrideAttrs (oldAttrs: rec {
@@ -126,44 +105,6 @@
                 url = "https://go.dev/dl/go${version}.src.tar.gz";
                 hash = "sha256-NpMBYqk99BfZC9IsbhTa/0cFuqwrAkGO3aZxzfqc0H8=";
               };
-            });
-            # temporary, until PR #344555 is merged
-            vault = super.vault.overrideAttrs (oldAttrs: rec {
-              version = "1.17.6";
-              src = super.fetchFromGitHub {
-                owner = "hashicorp";
-                repo = "vault";
-                rev = "v${version}";
-                hash = "sha256-sd4gNNJ/DVpl7ReymykNemWz4NNisofMIH6lLNl+iVw=";
-              };
-              vendorHash = "sha256-V7aMf03U2DTNg1murp4LBfuOioA+7iG6jX9o05rhM2U=";
-            });
-            vault-bin = super.vault-bin.overrideAttrs (oldAttrs: rec {
-              version = "1.17.6";
-              src =
-                let
-                  inherit (super.stdenv.hostPlatform) system;
-                  selectSystem = attrs: attrs.${system} or (throw "Unsupported system: ${system}");
-                  suffix = selectSystem {
-                    x86_64-linux = "linux_amd64";
-                    aarch64-linux = "linux_arm64";
-                    i686-linux = "linux_386";
-                    x86_64-darwin = "darwin_amd64";
-                    aarch64-darwin = "darwin_arm64";
-                  };
-                  hash = selectSystem {
-                    x86_64-linux = "sha256-K9yNZ4M8u8FfisWi6Y6TsBJy6FQytr3htNCsKh2MlyA=";
-                    aarch64-linux = "sha256-KLHkxUGvekHT/bPtoIlmylCubTWH+I7Q0wJM0UG0Hp8=";
-                    i686-linux = "sha256-jBS/nGKP27weFw4u6Q10athYwCqWLzpb7ph39v+QAN8=";
-                    x86_64-darwin = "sha256-5KfWqtJldk66dO5ImYKivDau4JzacUIXBfAzWkkPfoE=";
-                    aarch64-darwin = "sha256-wjmNY1lunJDjpkWDXl0upAeNBqBx8momlY4a3j+hMd0=";
-                  };
-                in
-                super.fetchzip {
-                  url = "https://releases.hashicorp.com/vault/${version}/vault_${version}_${suffix}.zip";
-                  stripRoot = false;
-                  inherit hash;
-                };
             });
             # temporary, until PR #331913 is merged
             boundary = super.boundary.overrideAttrs (oldAttrs: rec {
@@ -249,32 +190,6 @@
             fi
           '';
         };
-        updatePackagesScript = pkgs.writeShellApplication {
-          name = "update-packages";
-          runtimeInputs = with pkgs; [
-            jq
-            nix
-            coreutils
-          ];
-          text = ''
-            #!/usr/bin/env bash
-            set -euo pipefail
-
-            # get packages by folder name under pkgs directory
-            PACKAGES=$(find ./pkgs -mindepth 1 -maxdepth 1 -type d -exec basename {} \;)
-            PACKAGES+=" " # add packages here that are only define in flake.nix (such as nomad_1_8 bump)
-            
-            if [ -n "$PACKAGES" ]; then
-              echo "$PACKAGES" | while read -r pkg; do
-                echo "Checking package: $pkg"
-                if nix eval ".#$pkg" --json >/dev/null 2>&1; then
-                  # FIXME: pin to a specific version of nix-update
-                  nix run github:Mic92/nix-update -- -F "$pkg"
-                fi
-              done
-            fi
-          '';
-        };
         allPackages = {
           # pre-build attic binaries
           attic = attic.packages.${system}.attic;
@@ -331,10 +246,6 @@
           push-packages = {
             type = "app";
             program = "${pushPackagesScript}/bin/push-packages";
-          };
-          update-packages = {
-            type = "app";
-            program = "${updatePackagesScript}/bin/update-packages";
           };
         };
       }
