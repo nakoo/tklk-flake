@@ -17,11 +17,11 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "nomad";
-    rev = "v1.9.0-beta.1";
-    hash = "sha256-yuspBM8rMUXJ660+Z5xd3csWeVGnDHXpUbBx16j51m8=";
+    rev = "v1.9.0-beta.2";
+    hash = "sha256-aAKxGp3bxbvpnl41MquT7A+T61ooJcWnry81P7JiPm4=";
   };
 
-  vendorHash = "sha256-Himhn83e+i19KARDEWjfqqBN57BQ9+EQ0ymAJAiIWiU=";
+  vendorHash = "sha256-Ss/qwQ14VUu40nXaIgTfNuj95ekTTVrY+zcStFDSCyI=";
 
   subPackages = [ "." ];
 
