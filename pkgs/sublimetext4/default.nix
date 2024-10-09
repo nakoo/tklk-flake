@@ -52,8 +52,8 @@ let
   };
   sublime4-dev = sublime4-darwin-common {
     dev = true;
-    version = "4178";
-    hash = "sha256-6hG1R0uurPc5KHu7pGFx0gtf5fcMVFu33NOFgKVl16A=";
+    version = "4183";
+    hash = "sha256-5BiTuSgi9LQqIo2dW13QqALB6s/4bO17MnFQpztFTGc=";
   };
 in
 if dev then sublime4-dev else sublime4
