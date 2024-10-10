@@ -188,6 +188,7 @@
           consul-cni = pkgs.callPackage ./pkgs/consul-cni { };
           grpcmd = pkgs.callPackage ./pkgs/grpcmd { };
           tc-redirect-tap = pkgs.callPackage ./pkgs/tc-redirect-tap { };
+          faktory = pkgs.callPackage ./pkgs/faktory { };
 
           goat = pkgs.callPackage ./pkgs/goat { };
 
