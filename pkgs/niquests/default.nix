@@ -93,6 +93,8 @@ buildPythonPackage rec {
     "test_awaitable_get_direct_access_lazy"
     "test_awaitable_redirect_direct_access_with_lazy"
     "test_awaitable_stream_redirect_direct_access_with_lazy"
+    "test_with_async_iterable"
+    "test_post_data_with_multiplexed"
   ];
 
   nativeCheckInputs = [
