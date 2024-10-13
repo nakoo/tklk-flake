@@ -182,6 +182,7 @@
 
           go_1_22 = pkgs.go_1_22;
           go_1_23 = pkgs.go_1_23;
+          git-lfs = pkgs.git-lfs;
 
           # cloud native tools
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
