@@ -18,6 +18,11 @@ mkYarnPackage rec {
     hash = "sha256-j0mFVCF6Jh1KGf4xh2dA7qraqod5RMcgK1eb4v56/pE=";
   };
 
+  packageJSON = builtins.fetchurl {
+    url = "https://raw.githubusercontent.com/efritz/aidev/8d71937e0ef4db86e75f4c04503c001aea5d1b63/package.json";
+    sha256 = "sha256-Hm9eEyU1B+CmGC+5VnLEnn0pAJg2HcOUDEGFBc2XrMA=";
+  };
+
   postPatch = ''
     substituteInPlace src/providers/keys.ts \
       --replace "path.join(homedir(), 'dev', 'efritz', 'aidev')" \
