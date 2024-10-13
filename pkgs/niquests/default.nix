@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "niquests";
-  version = "3.9.0";
+  version = "3.9.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-70YfzDjcbq3oIV5ZCWWTukJfdI7SLiAID3C+jH2f5yQ=";
+    hash = "sha256-TkPX58JHNA/fP2HgTLxoqKpu68oAx2zaFoMlq4yqTqE=";
   };
 
   dependencies = [
@@ -61,6 +61,38 @@ buildPythonPackage rec {
 
     # fails due to temporary issue with remote config
     "test_ensure_http3_default"
+
+    # remote network connection to pie.dev
+    "test_awaitable_get"
+    "test_ensure_ipv4"
+    "test_awaitable_redirect_chain"
+    "test_ensure_http2"
+    "test_awaitable_redirect_chain_stream"
+    "test_not_owned_resolver"
+    "test_async_session_cookie_dummylock"
+    "test_owned_resolver_must_close"
+    "test_concurrent_task_get"
+    "test_owned_resolver_must_recycle"
+    "test_with_async_auth"
+    "test_with_stream_json"
+    "test_with_stream_text"
+    "test_with_stream_iter_decode"
+    "test_with_stream_iter_raw"
+
+    "test_one_at_a_time"
+    "test_early_close_no_error"
+    "test_lazy_access_sync_mode"
+    "test_get_stream_with_multiplexed"
+    "test_concurrent_request_in_sync"
+    "test_concurrent_task_get_with_stream"
+    "test_redirect_with_multiplexed"
+    "test_redirect_with_multiplexed_direct_access"
+    "test_awaitable_get"
+    "test_awaitable_redirect_chain"
+    "test_awaitable_redirect_with_lazy"
+    "test_awaitable_get_direct_access_lazy"
+    "test_awaitable_redirect_direct_access_with_lazy"
+    "test_awaitable_stream_redirect_direct_access_with_lazy"
   ];
 
   nativeCheckInputs = [
