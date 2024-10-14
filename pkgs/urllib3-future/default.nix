@@ -68,6 +68,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_doh_rfc8484"
+    "test_task_safe_resolver" # relies on external dns server
   ];
   disabledTestPaths = [
     "test/contrib/test_resolver.py"
