@@ -110,7 +110,7 @@
             consul = super.consul.overrideAttrs (oldAttrs: rec {
               version = "1.20.0";
               vendorHash = "sha256-7Nw2zuTyAR7mzxFkeOuhbh9OAlshZA0JKOVQdckIF90=";
-              src = fetchFromGitHub {
+              src = super.fetchFromGitHub {
                 owner = "hashicorp";
                 repo = "consul";
                 rev = "refs/tags/v${version}";
