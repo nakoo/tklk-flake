@@ -183,6 +183,8 @@
           go_1_22 = pkgs.go_1_22;
           go_1_23 = pkgs.go_1_23;
           git-lfs = pkgs.git-lfs;
+          yarn2nix = pkgs.yarn2nix;
+          nix-prefetch-git = pkgs.nix-prefetch-git;
 
           # cloud native tools
           cilium-cni = pkgs.callPackage ./pkgs/cilium-cni { };
