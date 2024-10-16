@@ -54,6 +54,7 @@
                   substituteInPlace tests/conftest.py --replace 'if _remote_httpbin_available:' 'if False:'
                 '';
               propagatedBuildInputs = oldAttrs.propagatedBuildInputs or [ ] ++ [ super.niquests ];
+              checkInputs = oldAttrs.checkInputs or [ ] ++ [ super.coreutils ]; # tests need access to various coreutils bins
               disabledTests = oldAttrs.disabledTests or [ ] ++ [
                 "test_config_dir_is_created"
                 "test_ensure_resolver_used"
@@ -74,8 +75,8 @@
               src = super.fetchFromGitHub {
                 owner = "Ousret";
                 repo = "httpie";
-                rev = "5e87d1b0574e962ff3779f4613df692847d8d020";
-                hash = "sha256-pqMIwiWcxe16oWC4cRP4fbXLJNNhSuqicutpKVvXMdA=";
+                rev = "da6cc13b8b775834edbde68836c826390da3dbc3";
+                hash = "sha256-FmNpWTUskPozJN6xJuL9it/Q5SZ9NVzZwB6Zk+zM3Uk=";
               };
             });
           })
