@@ -79,19 +79,6 @@
                 hash = "sha256-FmNpWTUskPozJN6xJuL9it/Q5SZ9NVzZwB6Zk+zM3Uk=";
               };
             });
-          })
-          (self: super: {
-            # temporary, until PR #344262 is merged
-            nomad-pack = super.nomad-pack.overrideAttrs (oldAttrs: rec {
-              version = "nightly-2024-09-23";
-              src = super.fetchFromGitHub {
-                owner = "hashicorp";
-                repo = "nomad-pack";
-                rev = "3c0178a561b360906c591718edb25ae25ae9d964"; # nightly tag as of 2024-09-23
-                hash = "sha256-8erw+8ZTpf8Dc9m6t5NeRgwOETkjXN/wVhoZ4g0uWhg=";
-              };
-              vendorHash = "sha256-Rt0T6cCMzO4YBFF6/9xeCZcsqziDmxPMNirHLqepwek=";
-            });
             # temporary, until PR hydra builds the merged PR
             go_1_22 = super.go_1_22.overrideAttrs (oldAttrs: rec {
               version = "1.22.8";
@@ -106,6 +93,19 @@
                 url = "https://go.dev/dl/go${version}.src.tar.gz";
                 hash = "sha256-NpMBYqk99BfZC9IsbhTa/0cFuqwrAkGO3aZxzfqc0H8=";
               };
+            });
+          })
+          (self: super: {
+            # temporary, until PR #344262 is merged
+            nomad-pack = super.nomad-pack.overrideAttrs (oldAttrs: rec {
+              version = "nightly-2024-09-23";
+              src = super.fetchFromGitHub {
+                owner = "hashicorp";
+                repo = "nomad-pack";
+                rev = "3c0178a561b360906c591718edb25ae25ae9d964"; # nightly tag as of 2024-09-23
+                hash = "sha256-8erw+8ZTpf8Dc9m6t5NeRgwOETkjXN/wVhoZ4g0uWhg=";
+              };
+              vendorHash = "sha256-Rt0T6cCMzO4YBFF6/9xeCZcsqziDmxPMNirHLqepwek=";
             });
             # temporary, until PR #348657 is built in nixpkgs-unstable
             consul = super.consul.overrideAttrs (oldAttrs: rec {
@@ -184,8 +184,8 @@
             });
           })
           (self: super: {
-            # change default to 1.8
-            nomad = super.nomad_1_8;
+            # change default to 1.9
+            nomad = super.nomad_1_9;
           })
         ];
         # Determine if the system is Darwin
@@ -270,6 +270,8 @@
 
           # misc
           aidev = pkgs.callPackage ./pkgs/aidev { };
+          comply = pkgs.callPackage ./pkgs/comply { };
+          cryptfs = pkgs.callPackage ./pkgs/cryptfs-cli { };
           faktory = pkgs.callPackage ./pkgs/faktory { };
           goat = pkgs.callPackage ./pkgs/goat { };
 
@@ -277,8 +279,8 @@
           terraform = pkgs.terraform;
           vault = pkgs.vault;
           vault-bin = pkgs.vault-bin;
-          nomad = pkgs.nomad;
           nomad_1_8 = pkgs.nomad_1_8;
+          nomad = pkgs.nomad;
           nomad_1_9 = pkgs.callPackage ./pkgs/nomad_1_9 { };
           consul = pkgs.consul;
           boundary = pkgs.boundary;

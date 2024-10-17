@@ -5,8 +5,6 @@
   buildGo123Module,
   fetchFromGitHub,
   installShellFiles,
-  nix-update,
-  semver-tool,
   ...
 }:
 
@@ -17,8 +15,8 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "nomad";
-    rev = "v1.9.0-beta.2";
-    hash = "sha256-aAKxGp3bxbvpnl41MquT7A+T61ooJcWnry81P7JiPm4=";
+    rev = "v1.9.0";
+    hash = "sha256-MJNPYSH3KsRmGQeOcWw4VvDeFGinfsyGSo4q3OdOZo8=";
   };
 
   vendorHash = "sha256-Ss/qwQ14VUu40nXaIgTfNuj95ekTTVrY+zcStFDSCyI=";
@@ -37,8 +35,6 @@ buildGo123Module rec {
     echo "complete -C $out/bin/nomad nomad" > nomad.bash
     installShellCompletion nomad.bash
   '';
-
-  buildInputs = [ nix-update semver-tool ];
 
   meta = {
     license = lib.licenses.bsl11;
