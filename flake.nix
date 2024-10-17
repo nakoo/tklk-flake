@@ -79,21 +79,6 @@
                 hash = "sha256-FmNpWTUskPozJN6xJuL9it/Q5SZ9NVzZwB6Zk+zM3Uk=";
               };
             });
-            # temporary, until PR hydra builds the merged PR
-            go_1_22 = super.go_1_22.overrideAttrs (oldAttrs: rec {
-              version = "1.22.8";
-              src = super.fetchurl {
-                url = "https://go.dev/dl/go${version}.src.tar.gz";
-                hash = "sha256-3xLCPr8Z3qD0v0aiLL7aSj7Kb0dPMYOQzndJdCeEQLg=";
-              };
-            });
-            go_1_23 = super.go_1_23.overrideAttrs (oldAttrs: rec {
-              version = "1.23.2";
-              src = super.fetchurl {
-                url = "https://go.dev/dl/go${version}.src.tar.gz";
-                hash = "sha256-NpMBYqk99BfZC9IsbhTa/0cFuqwrAkGO3aZxzfqc0H8=";
-              };
-            });
           })
           (self: super: {
             # temporary, until PR #349075 is built in nixpkgs-unstable
@@ -110,13 +95,13 @@
             # temporary, until PR #348657 is built in nixpkgs-unstable
             consul = super.consul.overrideAttrs (oldAttrs: rec {
               version = "1.20.0";
-              vendorHash = "sha256-7Nw2zuTyAR7mzxFkeOuhbh9OAlshZA0JKOVQdckIF90=";
               src = super.fetchFromGitHub {
                 owner = "hashicorp";
                 repo = "consul";
                 rev = "refs/tags/v${version}";
                 hash = "sha256-yHhaaZZ/KxQk8RVkqNfyfWTPS5K+BhckcxqdC5gN+ko=";
               };
+              vendorHash = "sha256-7Nw2zuTyAR7mzxFkeOuhbh9OAlshZA0JKOVQdckIF90=";
             });
             # temporary, until PR #347416 is built in nixpkgs-unstable
             vault = super.vault.overrideAttrs (oldAttrs: rec {
@@ -268,7 +253,7 @@
           httpie = pkgs.httpie;
 
           go_1_22 = pkgs.go_1_22;
-          go_1_23 = pkgs.go_1_23;
+          go_1_23 = pkgs.go;
           git-lfs = pkgs.git-lfs;
           yarn2nix = pkgs.yarn2nix;
           nix-prefetch-git = pkgs.nix-prefetch-git;
