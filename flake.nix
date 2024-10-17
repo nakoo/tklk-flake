@@ -96,16 +96,16 @@
             });
           })
           (self: super: {
-            # temporary, until PR #348657 is built in nixpkgs-unstable
+            # temporary, until PR #349075 is built in nixpkgs-unstable
             terraform = super.terraform.overrideAttrs (oldAttrs: rec {
-              version = "1.20.0";
-              vendorHash = "sha256-7Nw2zuTyAR7mzxFkeOuhbh9OAlshZA0JKOVQdckIF90=";
+              version = "1.9.8";
               src = super.fetchFromGitHub {
                 owner = "hashicorp";
                 repo = "terraform";
                 rev = "refs/tags/v${version}";
-                hash = "sha256-yHhaaZZ/KxQk8RVkqNfyfWTPS5K+BhckcxqdC5gN+ko=";
+                hash = "sha256-L0F0u96et18IlqAUsc0HK+cLeav2OqN4kxs58hPNMIM=";
               };
+              vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
             });
             # temporary, until PR #348657 is built in nixpkgs-unstable
             consul = super.consul.overrideAttrs (oldAttrs: rec {
