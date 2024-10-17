@@ -97,6 +97,17 @@
           })
           (self: super: {
             # temporary, until PR #348657 is built in nixpkgs-unstable
+            terraform = super.terraform.overrideAttrs (oldAttrs: rec {
+              version = "1.20.0";
+              vendorHash = "sha256-7Nw2zuTyAR7mzxFkeOuhbh9OAlshZA0JKOVQdckIF90=";
+              src = super.fetchFromGitHub {
+                owner = "hashicorp";
+                repo = "terraform";
+                rev = "refs/tags/v${version}";
+                hash = "sha256-yHhaaZZ/KxQk8RVkqNfyfWTPS5K+BhckcxqdC5gN+ko=";
+              };
+            });
+            # temporary, until PR #348657 is built in nixpkgs-unstable
             consul = super.consul.overrideAttrs (oldAttrs: rec {
               version = "1.20.0";
               vendorHash = "sha256-7Nw2zuTyAR7mzxFkeOuhbh9OAlshZA0JKOVQdckIF90=";
@@ -174,7 +185,7 @@
           })
           (self: super: {
             # change default to 1.9
-            nomad = super.nomad_1_9;
+            nomad = allPackages.nomad_1_9;
           })
         ];
         # Determine if the system is Darwin
