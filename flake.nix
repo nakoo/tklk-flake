@@ -103,7 +103,7 @@
                 owner = "hashicorp";
                 repo = "terraform";
                 rev = "refs/tags/v${version}";
-                hash = "sha256-L0F0u96et18IlqAUsc0HK+cLeav2OqN4kxs58hPNMIM=";
+                hash = "sha256-0xBhOdaIbw1fLmbI4KDvQoHD4BmVZoiMT/zv9MnwuD4=";
               };
               vendorHash = "sha256-tH9KQF4oHcQh34ikB9Bx6fij/iLZN+waxv5ZilqGGlU=";
             });
