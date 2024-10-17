@@ -182,6 +182,17 @@
                   stripRoot = false;
                 };
             });
+            # awaiting PR #349071
+            nomad-pack = super.nomad-pack.overrideAttrs (oldAttrs: rec {
+              version = "0.2.0";
+              src = super.fetchFromGitHub {
+                owner = "hashicorp";
+                repo = "nomad-pack";
+                rev = "v${version}";
+                hash = "sha256-dw6sueC1qibJYc6sbZX8HJlEf9R6O8dlE1aobw70UHw=";
+              };
+              vendorHash = "sha256-BKYJ9FZXKpFwK3+mrZAXRkfitSY9jeOLLeC0BOsKc/A=";
+            });
           })
           (self: super: {
             # change default to 1.9
