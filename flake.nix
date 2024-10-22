@@ -76,7 +76,7 @@
                 owner = "Ousret";
                 repo = "httpie";
                 rev = "e375c259e8f3a9d408b1877b628d94bf7e20350f";
-                hash = "";
+                hash = "sha256-/fsxwaIHNF/2KJgtFDAKROFNYZ3A8EHC1VQufq7hoGE=";
               };
             });
           })
