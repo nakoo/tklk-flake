@@ -16,10 +16,10 @@ buildGo123Module rec {
     owner = "hashicorp";
     repo = "nomad";
     rev = "v1.9.0";
-    hash = "";
+    hash = "sha256-MJNPYSH3KsRmGQeOcWw4VvDeFGinfsyGSo4q3OdOZo8=";
   };
 
-  vendorHash = "";
+  vendorHash = "sha256-Ss/qwQ14VUu40nXaIgTfNuj95ekTTVrY+zcStFDSCyI=";
 
   subPackages = [ "." ];
 
