@@ -10,16 +10,16 @@
 
 buildGo123Module rec {
   pname = "nomad";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "nomad";
     rev = "v1.9.0";
-    hash = "sha256-MJNPYSH3KsRmGQeOcWw4VvDeFGinfsyGSo4q3OdOZo8=";
+    hash = "";
   };
 
-  vendorHash = "sha256-Ss/qwQ14VUu40nXaIgTfNuj95ekTTVrY+zcStFDSCyI=";
+  vendorHash = "";
 
   subPackages = [ "." ];
 

@@ -75,8 +75,8 @@
               src = super.fetchFromGitHub {
                 owner = "Ousret";
                 repo = "httpie";
-                rev = "da6cc13b8b775834edbde68836c826390da3dbc3";
-                hash = "sha256-FmNpWTUskPozJN6xJuL9it/Q5SZ9NVzZwB6Zk+zM3Uk=";
+                rev = "e375c259e8f3a9d408b1877b628d94bf7e20350f";
+                hash = "";
               };
             });
           })
