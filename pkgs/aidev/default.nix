@@ -9,17 +9,17 @@
 
 mkYarnPackage rec {
   pname = "aidev";
-  version = "unstable-2024-10-14";
+  version = "unstable-2024-10-22";
 
   src = fetchFromGitHub {
     owner = "efritz";
     repo = "aidev";
-    rev = "c1b3c0d3ea803d87de99bb136908e2d9163775c0";
-    hash = "sha256-Jt3LDlF2SdwfBjX/hz7ymwpCBZVA4d6Gsm48/4m+jXI=";
+    rev = "7ae03d31153b400503e290030b725fd72ccf8095";
+    hash = "sha256-GeU38CdGI7vAqgrcJAHr0WNyCzjwak00dNTsY6voPhY=";
   };
 
   packageJSON = builtins.fetchurl {
-    url = "https://raw.githubusercontent.com/efritz/aidev/c1b3c0d3ea803d87de99bb136908e2d9163775c0/package.json";
+    url = "https://raw.githubusercontent.com/efritz/aidev/7ae03d31153b400503e290030b725fd72ccf8095/package.json";
     sha256 = "sha256-Hm9eEyU1B+CmGC+5VnLEnn0pAJg2HcOUDEGFBc2XrMA=";
   };
 
