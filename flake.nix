@@ -182,6 +182,7 @@
           cryptfs = pkgs.callPackage ./pkgs/cryptfs-cli { };
           faktory = pkgs.callPackage ./pkgs/faktory { };
           goat = pkgs.callPackage ./pkgs/goat { };
+          priscope = pkgs.callPackage ./pkgs/priscope { };
 
           # non-free packages to cache in personal binary store
           terraform = pkgs.terraform;
